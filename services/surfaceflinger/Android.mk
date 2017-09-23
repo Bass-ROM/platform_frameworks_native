@@ -45,6 +45,7 @@ LOCAL_C_INCLUDES := \
     frameworks/native/vulkan/include \
     external/vulkan-validation-layers/libs/vkjson \
     system/libhwbinder/fast_msgq/include \
+    $(if $(BOARD_GPU_DRIVERS),external/drm_gralloc) \
 
 LOCAL_CFLAGS := -DLOG_TAG=\"SurfaceFlinger\"
 LOCAL_CFLAGS += -DGL_GLEXT_PROTOTYPES -DEGL_EGLEXT_PROTOTYPES
@@ -58,6 +59,10 @@ else
     LOCAL_SRC_FILES += \
         SurfaceFlinger_hwc1.cpp \
         DisplayHardware/HWComposer_hwc1.cpp
+endif
+
+ifneq ($(TARGET_BUILD_VARIANT),user)
+    LOCAL_CFLAGS += -DCONSOLE_MANAGER -DANDROID_VT=7
 endif
 
 LOCAL_CFLAGS += -fvisibility=hidden -Werror=format
